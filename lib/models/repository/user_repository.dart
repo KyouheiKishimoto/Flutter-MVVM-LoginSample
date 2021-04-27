@@ -1,4 +1,5 @@
 import 'package:chopper/chopper.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart' as auth;
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_login_test/data_models/user.dart';
@@ -13,32 +14,28 @@ class UserRepository extends ChangeNotifier {
 
   final UsersDao _dao;
 
-  final auth.FirebaseAuth _auth = auth.FirebaseAuth.instance;
-  final GoogleSignIn _googleSignIn = GoogleSignIn();
+  // final auth.FirebaseAuth _auth = auth.FirebaseAuth.instance;
+  // final GoogleSignIn _googleSignIn = GoogleSignIn();
 
 
   /// ChangeNotifierProviderを参照　つまりここでインスタンス化されたApiServiceとDaoを取得する
   ///
-  /// [apiService]　ニュースApi取得
+  /// [apiService]　UserApi取得
   ///
   /// [dao] データベース
   UserRepository({dao, apiService})
       : _loginApiService = apiService,
         _dao = dao;
 
-
   // ログインしているか
   bool _isLoading = false;
-
   bool get isLoading => _isLoading;
 
   // 成功しているか
   bool _isSuccessful = false;
-
   bool get isSuccessful => _isSuccessful;
 
   Response<dynamic> _res;
-
   Response<dynamic> get res => _res;
 
   /// ログインしているか判定処理
@@ -56,11 +53,15 @@ class UserRepository extends ChangeNotifier {
   ///
   /// true:ログイン処理成功 false:ログイン処理失敗
   Future<bool> signIn({@required String email, String password}) async {
-    print(_res =
-        await _loginApiService.getUserInfo(email: email, password: password));
+    print(_res = await _loginApiService.getUserInfo(email: email, password: password));
 
     print("ログインの結果");
     print(_res.body);
+    final snapshot =
+    await FirebaseFirestore.instance.collection('users').get();
+    print( snapshot);
+
+
 
     // try{
     //
@@ -72,7 +73,11 @@ class UserRepository extends ChangeNotifier {
     //     accessToken: signInAuthentication.accessToken,);
     //
     //   final firebaseUser = (await _auth.signInWithCredential(credential)).user;
+    //
+    //   print("大丈夫だ問題ない");
+    //
     //   if (firebaseUser == null) {
+    //     print("そんなユーザはいない");
     //     return false;
     //   }
     //

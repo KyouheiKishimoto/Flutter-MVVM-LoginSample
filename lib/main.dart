@@ -1,3 +1,4 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_login_test/di/providers.dart';
 import 'package:flutter_login_test/view/home_screen.dart';
@@ -5,7 +6,14 @@ import 'package:flutter_login_test/view/login/login_screen.dart';
 import 'package:flutter_login_test/view_models/login_view_model.dart';
 import 'package:provider/provider.dart';
 
-void main() {
+Future<void> main() async {
+
+  //ここで初期化とかが必要なら下のやつ宣言せーよらしいので宣言します
+  WidgetsFlutterBinding.ensureInitialized();
+
+  //Firebaseの初期化
+  await Firebase.initializeApp();
+
   runApp(
     MultiProvider(
       providers: globalProviders,
