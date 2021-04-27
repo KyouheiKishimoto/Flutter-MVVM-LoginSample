@@ -6,7 +6,7 @@ part 'login_api_service.chopper.dart';
 @ChopperApi()
 abstract class LoginApiService extends ChopperService {
   //定数
-  static const BASE_URL = "";
+  static const BASE_URL = "https://test2019.webagre.com/app/";
 
   //Login用のAPI
   static LoginApiService create() {
