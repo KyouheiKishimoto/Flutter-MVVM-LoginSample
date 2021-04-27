@@ -5,9 +5,9 @@ import 'package:flutter_login_test/models/repository/user_repository.dart';
 
 class LoginViewModel extends ChangeNotifier {
 
-  final UserRepository userRepository;
-  LoginViewModel({repository}): userRepository = repository;
-  // LoginViewModel({this.userRepository});
+  final UserRepository _userRepository;
+
+  LoginViewModel({userRepository}): _userRepository = userRepository;
 
   String _email = "";
   String get email => _email;
@@ -15,11 +15,20 @@ class LoginViewModel extends ChangeNotifier {
   String _password = "";
   String get password => _password;
 
-  bool isLoading = false;
-  bool isSuccessful = false;
+  bool _isLoading = false;
+  bool get isLoading => _isLoading;
+
+  bool _isSuccessful = false;
+  bool get isSuccessful => _isSuccessful;
+
+  @override
+  void dispose() {
+    _userRepository.dispose();
+    super.dispose();
+  }
 
   Future<bool> isSingIn() async {
-    return await userRepository.isSingIn();
+    return await _userRepository.isSingIn();
   }
 
   Future<void> signIn(String email, String password) async {
@@ -27,7 +36,7 @@ class LoginViewModel extends ChangeNotifier {
     print("サインイン処理");
 
     //クルクルにするよ
-    isLoading = true;
+    _isLoading = true;
     //とりあえずクルクルだけやっとく
     notifyListeners();
 
@@ -36,19 +45,19 @@ class LoginViewModel extends ChangeNotifier {
     _password = password;
 
     //サインイン処理を行って
-    isSuccessful = await userRepository.signIn(
+    _isLoading = await _userRepository.signIn(
       email: _email,
       password: _password,
     );
 
-    isLoading = false;
+    _isLoading = false;
     notifyListeners();
 
   }
 
   onRepositoryUpdated(UserRepository repository) {
-    isSuccessful = repository.isSuccessful;
-    isLoading = repository.isLoading;
+    _isSuccessful = repository.isSuccessful;
+    _isLoading = repository.isLoading;
     notifyListeners();
   }
 

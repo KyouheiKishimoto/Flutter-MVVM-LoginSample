@@ -15,7 +15,7 @@ class _$LoginApiService extends LoginApiService {
     String password,
     String mode = "app",
   }) {
-    final $url = 'ここをAPIサーバーのURLにする';
+    final $url = 'FlutterLogin.php';
     final $params = <String, dynamic>{
       'email': email,
       'password': password,

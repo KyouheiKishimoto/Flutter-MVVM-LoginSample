@@ -28,7 +28,7 @@ dependencies:
   provider: ^4.3.2+1
 
   # Chopperをインストール
-  chopper: ^3.0.1+1
+  chopper: ^3.0.6
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
@@ -37,10 +37,28 @@ dependencies:
 
   font_awesome_flutter: ^8.8.1
 
-
+  moor: ^3.3.1
+  sqlite3_flutter_libs: ^0.4.1
+  path_provider:
+  path:
+  analyzer_plugin_fork: ^0.3.0
   fluttertoast: ^7.0.4
 
+  _fe_analyzer_shared: ^12.0.0
+
+  # firebase
+  firebase_core: ^1.0.4
+  firebase_auth: ^1.1.1
+  firebase_analytics: ^8.0.1
+  cloud_firestore: ^1.0.6
+  firebase_storage: ^8.0.4
+
+  google_sign_in: ^4.5.9
+
 dev_dependencies:
+  moor_generator: ^3.3.1
+  build_runner: ^1.11.1
+  chopper_generator: ^3.0.6
   flutter_test:
     sdk: flutter
 

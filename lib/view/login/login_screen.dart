@@ -23,47 +23,51 @@ class LoginScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    print("ここまで来ている");
     return Scaffold(
       body: Center(
         // child: Text("ほげ"),
         child: Consumer<LoginViewModel>(
           builder: (context, model, child) {
-            return model.isLoading
-                ? CircularProgressIndicator()
-                : Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[
-                      Padding(
-                        padding: EdgeInsets.fromLTRB(0, 24, 0, 24),
-                        child: Text("ログイン"),
-                      ),
-                      Padding(
-                        padding: EdgeInsets.fromLTRB(0, 8, 0, 8),
-                        child: EmailBar(
-                          onEmail: (emailText) =>
-                              login(context, emailEditValue, passwordEditValue),
-                          textEditingController: emailEditValue,
-                        ),
-                      ),
-                      Padding(
-                        padding: EdgeInsets.fromLTRB(0, 8, 0, 8),
-                        child: PasswordBar(
-                          onPassword: (passwordText) =>
-                              login(context, emailEditValue, passwordEditValue),
-                          textEditingController: passwordEditValue,
-                        ),
-                      ),
-                      SizedBox(
-                        height: 8.0,
-                      ),
-                      ButtonWithIcon(
-                        iconData: FontAwesomeIcons.signInAlt,
-                        label: "ログインするよ",
-                        onPressed: () =>
-                            login(context, emailEditValue, passwordEditValue),
-                      ),
-                    ],
-                  );
+            print("この下でエラー");
+            if(model.isLoading != null) {
+              return model.isLoading
+                  ? CircularProgressIndicator()
+                  : Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  Padding(
+                    padding: EdgeInsets.fromLTRB(0, 24, 0, 24),
+                    child: Text("ログイン"),
+                  ),
+                  Padding(
+                    padding: EdgeInsets.fromLTRB(0, 8, 0, 8),
+                    child: EmailBar(
+                      onEmail: (emailText) =>
+                          login(context, emailEditValue, passwordEditValue),
+                      textEditingController: emailEditValue,
+                    ),
+                  ),
+                  Padding(
+                    padding: EdgeInsets.fromLTRB(0, 8, 0, 8),
+                    child: PasswordBar(
+                      onPassword: (passwordText) =>
+                          login(context, emailEditValue, passwordEditValue),
+                      textEditingController: passwordEditValue,
+                    ),
+                  ),
+                  SizedBox(
+                    height: 8.0,
+                  ),
+                  ButtonWithIcon(
+                    iconData: FontAwesomeIcons.signInAlt,
+                    label: "ログインするよ",
+                    onPressed: () =>
+                        login(context, emailEditValue, passwordEditValue),
+                  ),
+                ],
+              );
+            }
           },
         ),
       ),

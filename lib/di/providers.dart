@@ -1,5 +1,8 @@
 
+import 'package:auto_data/auto_data.dart';
 import 'package:flutter_login_test/data_models/user.dart';
+import 'package:flutter_login_test/models/db/database_manager.dart';
+import 'package:flutter_login_test/models/db/users_dao.dart';
 import 'package:flutter_login_test/models/networking/login_api_service.dart';
 import 'package:flutter_login_test/models/repository/user_repository.dart';
 import 'package:flutter_login_test/view_models/login_view_model.dart';
@@ -20,6 +23,10 @@ List<SingleChildWidget> independentModels = [
     create: (_) => LoginApiService.create(),
     dispose: (_, loginApiService) => loginApiService.dispose(),
   ),
+  Provider<DatabaseManager>(
+    create: (_) => DatabaseManager(),
+    dispose: (_, db) => db.close(),
+  ),
 ];
 
 
@@ -27,9 +34,13 @@ List<SingleChildWidget> independentModels = [
  * 依存関係のあるProviderを宣言
  */
 List<SingleChildWidget> dependentModels = [
+  ProxyProvider<DatabaseManager, UsersDao>(
+    update: (_, db, dao) => UsersDao(db),
+  ),
   ChangeNotifierProvider<UserRepository>(
     create: (context) => UserRepository(
-      loginApiService : Provider.of<LoginApiService>(context, listen: false),
+      dao: Provider.of<UsersDao>(context, listen: false),
+      apiService : Provider.of<LoginApiService>(context, listen: false),
     ),
   ),
 ];
@@ -42,9 +53,8 @@ List<SingleChildWidget> viewModels = [
 
   ChangeNotifierProxyProvider<UserRepository, LoginViewModel>(
     create:(context) => LoginViewModel(
-      repository: Provider.of<UserRepository>(context, listen: false),
+      userRepository: Provider.of<UserRepository>(context, listen: false),
     ),
-    update: (context, repository, viewModel) =>
-    viewModel..onRepositoryUpdated(repository),
+    update: (context, repository, viewModel) => viewModel..onRepositoryUpdated(repository),
   ),
 ];
