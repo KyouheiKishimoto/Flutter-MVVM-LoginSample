@@ -23,50 +23,81 @@ class LoginScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print("ここまで来ている");
     return Scaffold(
       body: Center(
         // child: Text("ほげ"),
         child: Consumer<LoginViewModel>(
           builder: (context, model, child) {
-            print("この下でエラー");
-            if(model.isLoading != null) {
+            if (model.isLoading != null) {
               return model.isLoading
                   ? CircularProgressIndicator()
                   : Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  Padding(
-                    padding: EdgeInsets.fromLTRB(0, 24, 0, 24),
-                    child: Text("ログイン"),
-                  ),
-                  Padding(
-                    padding: EdgeInsets.fromLTRB(0, 8, 0, 8),
-                    child: EmailBar(
-                      onEmail: (emailText) =>
-                          login(context, emailEditValue, passwordEditValue),
-                      textEditingController: emailEditValue,
-                    ),
-                  ),
-                  Padding(
-                    padding: EdgeInsets.fromLTRB(0, 8, 0, 8),
-                    child: PasswordBar(
-                      onPassword: (passwordText) =>
-                          login(context, emailEditValue, passwordEditValue),
-                      textEditingController: passwordEditValue,
-                    ),
-                  ),
-                  SizedBox(
-                    height: 8.0,
-                  ),
-                  ButtonWithIcon(
-                    iconData: FontAwesomeIcons.signInAlt,
-                    label: "ログインするよ",
-                    onPressed: () =>
-                        login(context, emailEditValue, passwordEditValue),
-                  ),
-                ],
-              );
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
+                        Padding(
+                          padding: EdgeInsets.fromLTRB(0, 24, 0, 24),
+                          child: Text("ログイン"),
+                        ),
+                        Padding(
+                          padding: EdgeInsets.fromLTRB(0, 8, 0, 8),
+                          child: EmailBar(
+                            onEmail: (emailText) => login(
+                                context, emailEditValue, passwordEditValue),
+                            textEditingController: emailEditValue,
+                          ),
+                        ),
+                        Padding(
+                          padding: EdgeInsets.fromLTRB(0, 8, 0, 8),
+                          child: PasswordBar(
+                            onPassword: (passwordText) => login(
+                                context, emailEditValue, passwordEditValue),
+                            textEditingController: passwordEditValue,
+                          ),
+                        ),
+                        SizedBox(
+                          height: 8.0,
+                        ),
+                        Padding(
+                          padding: EdgeInsets.fromLTRB(0, 8, 0, 8),
+                          child: ButtonWithIcon(
+                            iconData: FontAwesomeIcons.signInAlt,
+                            label: "ログインするよ",
+                            onPressed: () => login(
+                                context, emailEditValue, passwordEditValue),
+                          ),
+                        ),
+                        Padding(
+                          padding: EdgeInsets.fromLTRB(0, 8, 0, 8),
+                          child: ButtonWithIcon(
+                            iconData: FontAwesomeIcons.blog,
+                            label: "新しく会員を追加するよ",
+                            onPressed: () => setUser(
+                              context,
+                            ),
+                          ),
+                        ),
+                        Padding(
+                          padding: EdgeInsets.fromLTRB(0, 8, 0, 8),
+                          child: ButtonWithIcon(
+                            iconData: FontAwesomeIcons.blog,
+                            label: "Google認証",
+                            onPressed: () => googleSignIn(
+                              context,
+                            ),
+                          ),
+                        ),
+                        Padding(
+                          padding: EdgeInsets.fromLTRB(0, 8, 0, 8),
+                          child: ButtonWithIcon(
+                            iconData: FontAwesomeIcons.blog,
+                            label: "facebook認証",
+                            onPressed: () => facebookSignIn(
+                              context,
+                            ),
+                          ),
+                        ),
+                      ],
+                    );
             }
           },
         ),
@@ -83,22 +114,53 @@ class LoginScreen extends StatelessWidget {
 }
 
 //ログインの処理
-login(BuildContext context, TextEditingController emailEditingController, TextEditingController passwordEditingController) async {
+login(BuildContext context, TextEditingController emailEditingController,
+    TextEditingController passwordEditingController) async {
   print("ログインのメソッドに入った");
   print(emailEditingController.text);
   print(passwordEditingController.text);
 
   final loginViewModel = Provider.of<LoginViewModel>(context, listen: false);
-  await loginViewModel.signIn(emailEditingController.text,passwordEditingController.text);
+  await loginViewModel.signIn(
+      emailEditingController.text, passwordEditingController.text);
   if (!loginViewModel.isSuccessful) {
     Fluttertoast.showToast(msg: "ログイン失敗しました");
     return;
-  }else{
-    print("通信はしてるみたい");
-    Fluttertoast.showToast(msg: "ログイン失敗しました");
+  } else {
+    Fluttertoast.showToast(msg: "ログインが成功しました");
+    _openHomeScreen(context);
     return;
   }
   _openHomeScreen(context);
+}
+
+
+googleSignIn(BuildContext context,) async {
+  final loginViewModel = Provider.of<LoginViewModel>(context, listen: false);
+
+  print("認証データ処理開始");
+  await loginViewModel.googleSignIn();
+  print("認証データ処理終了");
+
+  return;
+}
+
+facebookSignIn(BuildContext context,) async {
+  final loginViewModel = Provider.of<LoginViewModel>(context, listen: false);
+
+  print("認証データ処理開始");
+  // await loginViewModel.facebookSignIn();
+  print("認証データ処理終了");
+
+  return;
+}
+
+/// ユーザーを追加する処理
+Future<void> setUser(
+  BuildContext context,
+) async {
+  final loginViewModel = Provider.of<LoginViewModel>(context, listen: false);
+  await loginViewModel.setUser();
 }
 
 /// emailを取得するだけ

@@ -53,7 +53,10 @@ dependencies:
   cloud_firestore: ^1.0.6
   firebase_storage: ^8.0.4
 
+  # Auth
   google_sign_in: ^4.5.9
+#  flutter_facebook_login: ^3.0.0
+
 
 dev_dependencies:
   moor_generator: ^3.3.1

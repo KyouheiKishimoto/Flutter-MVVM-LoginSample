@@ -31,6 +31,19 @@ class LoginViewModel extends ChangeNotifier {
     return await _userRepository.isSingIn();
   }
 
+  ///　ユーザーを追加する処理
+  Future<void> setUser() async {
+    await _userRepository.setUser();
+  }
+
+  Future<bool> googleSignIn() async {
+    await _userRepository.googleSignIn();
+  }
+
+  // Future<bool> facebookSignIn() async {
+  //   await _userRepository.facebookSignIn();
+  // }
+
   Future<void> signIn(String email, String password) async {
 
     print("サインイン処理");
@@ -44,11 +57,15 @@ class LoginViewModel extends ChangeNotifier {
     _email = email;
     _password = password;
 
-    //サインイン処理を行って
-    _isLoading = await _userRepository.signIn(
-      email: _email,
-      password: _password,
-    );
+    if(_email != null && _email != "" && _password != null && _password != "" ) {
+      //サインイン処理を行って
+      _isSuccessful = await _userRepository.signIn(
+        email: _email,
+        password: _password,
+      );
+    }else{
+      print("なんにも入力されていないでログインするが押された場合の処理");
+    }
 
     _isLoading = false;
     notifyListeners();
